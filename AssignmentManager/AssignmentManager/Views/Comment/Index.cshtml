@@ -1,0 +1,34 @@
+﻿@model List<AssignmentManager.Entities.Comment>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1 class="pull-left">Comments for assignment: @ViewBag.AssignmentTitle</h1>
+<a href="/Comment/Create/@ViewBag.AssignmentId" class="btn btn-success pull-right" style="margin-top: 20px">Insert</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model)
+        {
+            <tr>
+                <td>@comment.Title</td>
+                <td>@comment.Content</td>
+                <td>@comment.CreatedAt</td>
+                <td>@comment.UpdatedAt</td>
+                <td>
+                    <a href="/Comment/Update/@comment.Id" class="btn btn-default">Update</a>
+                    <a href="/Comment/Delete/@comment.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

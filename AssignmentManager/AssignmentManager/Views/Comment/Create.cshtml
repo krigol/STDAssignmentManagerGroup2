@@ -1,0 +1,38 @@
+﻿
+@* COMMENTS *@
+
+@model AssignmentManager.Entities.Comment
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create Comment</h2>
+
+@using (Html.BeginForm("Create", "Comment"))
+{
+    @Html.HiddenFor(model => model.AssignmentId)
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, "Title:")
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Content, "Content:")
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control", @rows = "5" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="submit" value="Create" class="btn btn-success" />
+        </div>
+
+    </div>
+}

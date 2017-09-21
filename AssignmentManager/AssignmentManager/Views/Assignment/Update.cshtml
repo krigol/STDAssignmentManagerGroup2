@@ -1,0 +1,43 @@
+﻿@model AssignmentManager.Entities.Assignment
+@{
+    ViewBag.Title = "Update";
+}
+
+@using (Html.BeginForm("Update", "Assignment"))
+{
+    @Html.HiddenFor(model => model.CreatedAt)
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, "Title:")
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, "Description:")
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
+                </div>
+            </div>
+        </div>   
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsDone, "Done: ")
+                    @Html.CheckBoxFor(model => model.IsDone)
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <input type="submit" value="Update" class="btn btn-success"/>
+        </div>
+             
+    </div> 
+}
+
