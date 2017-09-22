@@ -1,5 +1,7 @@
 ﻿using AssignmentManager.DataAccess;
 using AssignmentManager.Entities;
+using AssignmentManager.Models;
+using AssignmentManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +12,39 @@ namespace AssignmentManager.Controllers
 {
     public class AssignmentController : Controller
     {
+        private AssignmentService service;
+
+        public AssignmentController()
+        {
+            service = new AssignmentService();
+        }
         //
         // GET: /Assignment/
         public ActionResult Index()
         {
             var assingments = new List<Assignment>();
-            var assingmentRepository = new AssignmentRepository();
-            assingments.AddRange(assingmentRepository.GetAll());
 
-            return View(assingments);
+            assingments.AddRange(service.GetAll());
+
+            var model = new AssignmentListViewModel();
+            model.Header = "Our Assignments List";
+
+            foreach (var entity in assingments)
+            {
+                var assignmentModel = new AssignmentViewModel
+                {
+                    Id = entity.Id,
+                    Title = entity.Title,
+                    Description = entity.Description,
+                    CreatedAt = entity.CreatedAt,
+                    UpdatedAt = entity.UpdatedAt,
+                    IsDone = entity.IsDone,
+                };
+
+                model.Assignments.Add(assignmentModel);
+            }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -28,15 +54,19 @@ namespace AssignmentManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Assignment entity)
+        public ActionResult Create(AssignmentViewModel model)
         {
-            entity.CreatedAt = DateTime.Now;
-            entity.UpdatedAt = DateTime.Now;
-            entity.IsDone = false;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            var assignmentRepository = new AssignmentRepository();
+            var entity = new Assignment();
 
-            assignmentRepository.Insert(entity);
+            entity.Title = model.Title;
+            entity.Description = model.Description;
+            
+            service.Insert(entity);
 
             return RedirectToAction("Index");
         }
@@ -44,29 +74,48 @@ namespace AssignmentManager.Controllers
         [HttpGet]
         public ActionResult Update(int id)
         {
-            var assignmentRepository = new AssignmentRepository();
-            Assignment entity = assignmentRepository.GetById(id);
+            Assignment entity = service.GetById(id);
 
-            return View(entity);
+            var model = new AssignmentViewModel() 
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                Description = entity.Description,
+                CreatedAt = entity.CreatedAt,
+                UpdatedAt = entity.UpdatedAt,
+                IsDone = entity.IsDone
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Update(Assignment entity)
+        public ActionResult Update(AssignmentViewModel model)
         {
-            var assignmentRepository = new AssignmentRepository();
-            entity.UpdatedAt = DateTime.Now;
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            assignmentRepository.Update(entity);
+
+            var entity = new Assignment();
+            entity.Id = model.Id;
+            entity.Title = model.Title;
+            entity.Description = model.Description;
+            entity.IsDone = model.IsDone;
+            entity.CreatedAt = model.CreatedAt;
+
+
+            service.Update(entity);
 
             return RedirectToAction("Index"); 
         }
 
         public ActionResult Delete(int id)
         {
-            var assignmentRepository = new AssignmentRepository();
-            Assignment entity = assignmentRepository.GetById(id);
+            Assignment entity = service.GetById(id);
 
-            assignmentRepository.Delete(entity);
+            service.Delete(entity);
 
             return RedirectToAction("Index");
         }

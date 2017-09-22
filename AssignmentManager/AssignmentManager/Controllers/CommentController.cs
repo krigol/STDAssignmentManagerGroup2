@@ -1,5 +1,6 @@
 ﻿using AssignmentManager.DataAccess;
 using AssignmentManager.Entities;
+using AssignmentManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,25 @@ namespace AssignmentManager.Controllers
 
             var assignmentRepostory = new AssignmentRepository();
 
-            ViewBag.AssignmentTitle = assignmentRepostory.GetById(id).Title;
-            ViewBag.AssignmentId = id;
+            var model = new CommentsListViewModel();
+
+            model.AssignmentTitle = assignmentRepostory.GetById(id).Title;
+            model.AssignmentId = id;
+
+            foreach (var entity in comments)
+            {
+                var commentModel = new CommentViewModel
+                {
+                    Id = entity.Id,
+                    Content = entity.Content,
+                    Title = entity.Title,
+                    CreatedAt = entity.CreatedAt,
+                    UpdatedAt = entity.UpdatedAt,
+                    AssignmentId = entity.AssignmentId
+                };
+
+                model.Comments.Add(commentModel);
+            }
 
             // Navigational Properties example
 
@@ -31,25 +49,34 @@ namespace AssignmentManager.Controllers
             //ViewBag.AssignmentTitle =
             //    firstEntity != null ? firstEntity.Assignment.Title : "No COMMENTS YET";
 
-            return View(comments);
+            return View(model);
         }
 
         [HttpGet]
         public ActionResult Create(int id)
         {
-            Comment entity = new Comment()
+            var model = new CommentViewModel()
             { 
                 AssignmentId = id
             };
 
-            return View(entity);
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(Comment entity)
+        public ActionResult Create(CommentViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var entity = new Comment();
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = DateTime.Now;
+            entity.Title = model.Title;
+            entity.Content = model.Content;
+            entity.AssignmentId = model.AssignmentId;
 
             var commentsRepository = new CommentsRepository();
             commentsRepository.Insert(entity);
@@ -63,13 +90,34 @@ namespace AssignmentManager.Controllers
             var commentsRepository = new CommentsRepository();
             var entity = commentsRepository.GetById(id);
 
-            return View(entity);
+            var model = new CommentViewModel
+            {
+                Id = entity.Id,
+                Content = entity.Content,
+                Title = entity.Title,
+                CreatedAt = entity.CreatedAt,
+                UpdatedAt = entity.UpdatedAt,
+                AssignmentId = entity.AssignmentId
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Update(Comment entity)
+        public ActionResult Update(CommentViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var entity = new Comment();
             entity.UpdatedAt = DateTime.Now;
+            entity.CreatedAt = model.CreatedAt;
+            entity.Content = model.Content;
+            entity.Id = model.Id;
+            entity.AssignmentId = model.AssignmentId;
+            entity.Title = model.Title;
 
             var commentsRepository = new CommentsRepository();
             commentsRepository.Update(entity);

@@ -1,10 +1,10 @@
-﻿@model List<AssignmentManager.Entities.Comment>
+﻿@model AssignmentManager.Models.CommentsListViewModel
 @{
     ViewBag.Title = "Index";
 }
 
-<h1 class="pull-left">Comments for assignment: @ViewBag.AssignmentTitle</h1>
-<a href="/Comment/Create/@ViewBag.AssignmentId" class="btn btn-success pull-right" style="margin-top: 20px">Insert</a>
+<h1 class="pull-left">Comments for assignment: @Model.AssignmentTitle</h1>
+<a href="/Comment/Create/@Model.AssignmentId" class="btn btn-success pull-right" style="margin-top: 20px">Insert</a>
 
 <table class="table table-striped">
     <thead>
@@ -17,7 +17,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var comment in Model)
+        @foreach (var comment in Model.Comments)
         {
             <tr>
                 <td>@comment.Title</td>

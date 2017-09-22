@@ -1,9 +1,9 @@
-﻿@model List<AssignmentManager.Entities.Assignment>
+﻿@model AssignmentManager.Models.AssignmentListViewModel
 @{
     ViewBag.Title = "Index";
 }
 
-<h1 class="pull-left">Index</h1>
+<h1 class="pull-left">@Model.Header</h1>
 <a href="/Assignment/Create" class="btn btn-info pull-right" style="margin-top: 20px">Insert</a>
 
 <table class="table table-striped">
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-       @foreach (var assignment in Model)
+       @foreach (var assignment in Model.Assignments)
        {
            <tr>
                <td>@assignment.Title</td>

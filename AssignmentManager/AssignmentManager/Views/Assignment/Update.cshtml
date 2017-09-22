@@ -1,10 +1,11 @@
-﻿@model AssignmentManager.Entities.Assignment
+﻿@model AssignmentManager.Models.AssignmentViewModel
 @{
     ViewBag.Title = "Update";
 }
 
 @using (Html.BeginForm("Update", "Assignment"))
 {
+    @Html.ValidationSummary()
     @Html.HiddenFor(model => model.CreatedAt)
     <div class="container">
         <div class="row">

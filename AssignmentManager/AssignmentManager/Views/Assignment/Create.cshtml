@@ -1,4 +1,4 @@
-﻿@model AssignmentManager.Entities.Assignment
+﻿@model AssignmentManager.Models.AssignmentViewModel
 @{
     ViewBag.Title = "Create";
 }
@@ -7,11 +7,12 @@
 
 @using (Html.BeginForm("Create", "Assignment"))
 {
+    @Html.ValidationSummary()
     <div class="container">
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Title, "Title:")
+                    @Html.LabelFor(model => model.Title)
                     @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
                 </div>
             </div>
@@ -20,7 +21,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Description, "Description:")
+                    @Html.LabelFor(model => model.Description)
                     @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "5" })
                 </div>
             </div>

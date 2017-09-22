@@ -1,7 +1,7 @@
 ﻿
 @* COMMENTS *@
 
-@model AssignmentManager.Entities.Comment
+@model AssignmentManager.Models.CommentViewModel
 @{
     ViewBag.Title = "Create";
 }
@@ -10,6 +10,7 @@
 
 @using (Html.BeginForm("Create", "Comment"))
 {
+    @Html.ValidationSummary()
     @Html.HiddenFor(model => model.AssignmentId)
     <div class="container">
         <div class="row">
